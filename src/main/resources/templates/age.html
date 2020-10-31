@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ECharts</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.6.0/echarts.min.js"></script>
+</head>
+<body>
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+<div id="main" style="width: 600px;height:400px;"></div>
+
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 新建productName与nums数组来接受数据，因为我们
+    var sheyouName = [];
+    var age = [];
+
+    //AJAX接收数据主体
+    $.ajax({
+        type:"GET",
+        url:"/sheyou",
+        dataType:"json",
+        async:false,
+        success:function (result) {
+
+            for (var i = 0; i < result.length; i++){
+                sheyouName.push(result[i].sheyouName);
+                age.push(result[i].age);
+            }
+
+        },
+        error :function(errorMsg) {
+            alert("获取后台数据失败！");
+        }
+    });
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '203年龄柱状图'
+        },
+        tooltip: {},
+        legend: {
+            data:['age']
+        },
+        xAxis: {
+            //结合
+            data: sheyouName
+        },
+
+        yAxis: {},
+        series: [{
+            name: 'age',
+            type: 'bar',
+            //结合
+            data: age
+        }]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+</body>
+

@@ -2,8 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.wrj.datavisualization.mapper.ProductMapper">
 
-    <select id="getInfo" parameterType="int" resultType="com.wrj.datavisualization.bean.Product">
-        SELECT * FROM product WHERE id = #{id}
+    <resultMap id="productMap" type="com.wrj.datavisualization.bean.Product">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="productName" property="productName" />
+        <result column="nums" property="nums" />
+    </resultMap>
+    <select id="getInfo"  resultMap="productMap">
+        select id,productName,nums from product
     </select>
 
 </mapper>

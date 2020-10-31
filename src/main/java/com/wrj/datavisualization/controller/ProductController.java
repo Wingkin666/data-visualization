@@ -9,18 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProductController {
 
     @Autowired
     private ProductServiceImpl productService;
-
+    //示例
     @ResponseBody
     @RequestMapping("/project")
     public List<Product> myProject(){
-
         ArrayList<Product> productArrayList = new ArrayList<Product>();
         Product product1 = new Product();
         product1.setProductName("袜子");
@@ -34,31 +35,33 @@ public class ProductController {
         Product product4 = new Product();
         product4.setProductName("高跟鞋");
         product4.setNums("30");
-
         productArrayList.add(product1);
         productArrayList.add(product2);
         productArrayList.add(product3);
         productArrayList.add(product4);
-
         return productArrayList;
     }
 
-    @RequestMapping("/view")
+    @RequestMapping("/viewTest")
     public String myView(){
         return "view";
     }
 
+    //访问数据库
     @ResponseBody
-    @RequestMapping("/p/{id}")
-    public Object showProduct(@PathVariable("id") int id){
-        Product product= productService.getUser(id);
-        if(product != null){
-            return product;
-        }
-        else{
-            return "查询为空！";
-        }
-        //return user.toString();
+    @RequestMapping("/product")
+    public List<Product> showProduct(){
+        Map<String,Object> result = new HashMap<>();
+        List<Product> list = productService.getProduct(result);
+        //request.getSession().setAttribute("LIST",list);
+        //  return result;
+        return list;
+
+    }
+
+    @RequestMapping("/view")
+    public String myView2(){
+        return "product";
     }
 
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wrj.datavisualization.mapper.PeopleMapper">
+
+    <resultMap id="peopleMap" type="com.wrj.datavisualization.bean.People">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="sheyouName" property="sheyouName" />
+        <result column="age" property="age" />
+    </resultMap>
+    <select id="getAge"  resultMap="peopleMap">
+        select id,sheyouName,age from people
+    </select>
+
+</mapper>

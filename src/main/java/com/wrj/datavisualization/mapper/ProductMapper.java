@@ -2,6 +2,9 @@ package com.wrj.datavisualization.mapper;
 
 import com.wrj.datavisualization.bean.Product;
 
+import java.util.List;
+import java.util.Map;
+
 public interface ProductMapper {
-    Product getInfo(int id);
+    List<Product> getInfo(Map<String, Object> productMap);
 }
