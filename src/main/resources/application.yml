@@ -1,0 +1,30 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: data-visualization #当前服务的名称
+  #静态资源配置
+  mvc:
+    static-path-pattern: /static/**
+  #thymeleaf模板引擎配置
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+    cache: false
+    servlet:
+      content-type: text/html
+mybatis:
+    #配置实体类的包路径
+    type-aliases-package: com.wrj.visual.bean
+    #配置对应的xml路径
+    mapper-locations: classpath:mapper/*.xml
+
+logging:
+  level:
+    root: info
+  file:
+    path: /data/data-visualization/logs
+server:
+  port: 8888
