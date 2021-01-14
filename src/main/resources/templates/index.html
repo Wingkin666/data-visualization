@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>CRUD+Echart后台</title>
+    <title>豆瓣电影数据分析</title>
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}"/>
 </head>
 <body class="layui-layout-body">
@@ -11,18 +11,18 @@
     <div class="layui-header">
         <div class="layui-logo"><h2>豆瓣电影数据分析</h2></div>
         <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item"><a href="" target="iframe">前台主页</a></li>
-            <li class="layui-nav-item"><a href="" target="iframe">管理员信息</a></li>
-            <li class="layui-nav-item">
+            <li class="layui-nav-item"><a href="/showCrew" target="iframe">前台主页</a></li>
+            <!--<li class="layui-nav-item"><a href="" target="iframe">管理员信息</a></li>-->
+            <!--<li class="layui-nav-item">
                 <a href="javascript:;">其它系统</a>
                 <dl class="layui-nav-child">
                     <dd><a href="#" target="iframe">邮件管理</a></dd>
                     <dd><a href="#" target="iframe">消息管理</a></dd>
                     <dd><a href="#" target="iframe">授权管理</a></dd>
                 </dl>
-            </li>
+            </li>-->
         </ul>
-        <ul class="layui-nav layui-layout-right">
+        <!--<ul class="layui-nav layui-layout-right">
 
             <li class="layui-nav-item">
                 <a href="javascript:;" >
@@ -35,7 +35,7 @@
             </li>
             <li class="layui-nav-item"><a href="/">退出</a></li>
 
-        </ul>
+        </ul>-->
     </div>
 
     <div class="layui-side layui-bg-black">
@@ -43,23 +43,43 @@
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="test">
                 <li class="layui-nav-item layui-nav-itemed">
-                    <a href="javascript:;">系统设置</a>
+                    <a href="javascript:;">数据分析可视化</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/showpie" target="iframe">饼图案列</a></dd>
-                        <dd><a href="/showbar" target="iframe">柱状图案例</a></dd>
-                        <dd><a href="/showline" target="iframe">折线图案例</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item">
-                    <a href="javascript:;">数据表操作</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="/List" target="iframe">用户信息</a></dd>
-                        <dd><a href="/plist" target="iframe">产品信息表</a></dd>
-                        <dd><a href="/new" target="iframe">发起众筹</a></dd>
-                    </dl>
-                </li>
+                        <!-- 新加导航条 -->
+                        <dd><a href="/showTopTen" target="iframe">电影评分前十</a></dd>
+                        <dd><a href="/showLowTen" target="iframe">电影评分倒数前十</a></dd>
+                        <dd><a href="/showFilmMarket" target="iframe">电影产量与平均评分</a></dd>
+                        <dd><a href="/showFilmProduction" target="iframe">不同评分与片长电影产量</a></dd>
+                        <dd><a href="/showFilmTypes" target="iframe">电影类型占比与评分</a></dd>
+                        <dd><a href="/showHighestYield1" target="iframe">电影产量最多的十个国家</a></dd>
+                        <dd><a href="/showHighestYield2" target="iframe">产量前二十的主演和导演</a></dd>
+                        <dd><a href="/showActorNightingaleRoseDiagram" target="iframe">主演南丁格尔图</a></dd>
+                        <dd><a href="/showDirectorNightingaleRoseDiagram" target="iframe">导演南丁格尔图</a></dd>
+                        <dd><a href="/showMovieRank" target="iframe">评分区间与平行坐标系图</a></dd>
+                        <dd><a href="/showOutputChanges" target="iframe">电影产量变化折线图</a></dd>
 
-                <li class="layui-nav-item">
+
+                    </dl>
+                </li>
+                <!--<li class="layui-nav-item">
+                    <a href="javascript:;">python数据分析</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/showNumberScores" target="iframe">评分数量</a></dd>
+                        <dd><a href="/showNumberActors" target="iframe">电影主演</a></dd>
+                        <dd><a href="/showNumberDirectors" target="iframe">电影导演</a></dd>
+                        <dd><a href="/showCoordinateSystem" target="iframe">平行坐标系图</a></dd>
+                        <dd><a href="/showNumberRunningTime" target="iframe">电影片长</a></dd>
+                        <dd><a href="/showNumberTime" target="iframe">不同时间段上映的电影数量</a></dd>
+                        <dd><a href="/showProducerCountry" target="iframe">制片国家占比分析</a></dd>
+                        <dd><a href="/showTypeNumber" target="iframe">电影类型数量</a></dd>
+
+                        &lt;!&ndash;dd><a href="/List" target="iframe">用户信息</a></dd>
+                        <dd><a href="/plist" target="iframe">产品信息表</a></dd>
+                        <dd><a href="/new" target="iframe">发起众筹</a></dd>&ndash;&gt;
+                    </dl>
+                </li>-->
+
+                <!--<li class="layui-nav-item">
                     <a class="" href="javascript:;">文章管理</a>
                     <dl class="layui-nav-child">
                         <dd><a href="admin/html/blogsAdd.html" target="iframe">新增文章</a></dd>
@@ -82,7 +102,7 @@
                         <dd><a href="login.html">退出系统</a></dd>
                         <dd><a href="admin/html/welcome.html" target="iframe">超链接</a></dd>
                     </dl>
-                </li>
+                </li>-->
 
             </ul>
         </div>
@@ -91,8 +111,8 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <div style="padding: 2px;">
-            <iframe name="iframe" width="100%" height="700px" frameborder="0"
-                    class="xiframe" scrolling="no" src="/m"></iframe>
+            <iframe name="iframe" width="100%" height="1080px" frameborder="0"
+                    class="xiframe" scrolling="no" src="/showCrew"></iframe>
         </div>
 
     </div>
@@ -100,7 +120,7 @@
     <div class="layui-footer">
         <!-- 底部固定区域 -->
         <span style="margin-left: 500px">
-             @作者：逍遥随风
+             17大数据3班第二组   指导老师:许红龙
         </span>
 
     </div>

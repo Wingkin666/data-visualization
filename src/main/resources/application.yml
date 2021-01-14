@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: test
   application:
     name: data-visualization #当前服务的名称
   #静态资源配置
@@ -27,4 +27,4 @@ logging:
   file:
     path: /data/data-visualization/logs
 server:
-  port: 8888
+  port: 1988

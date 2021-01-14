@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wrj.visual.mapper.MovieQueryMapper">
+
+    <!--查询评分前十-->
+    <select id="topTenMovieList" resultType="com.wrj.visual.bean.MovieBean">
+        SELECT * from top_ten_score ORDER BY score DESC
+    </select>
+
+    <!--查询评分倒数前十-->
+    <select id="lowTenMovieList" resultType="com.wrj.visual.bean.MovieBean">
+        SELECT * from low_ten_score ORDER BY score
+    </select>
+
+</mapper>

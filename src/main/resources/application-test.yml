@@ -1,0 +1,7 @@
+spring:
+  #阿里云数据库配置
+  datasource:
+    url: jdbc:mysql://39.106.229.57:3306/movie_analysis?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=CST&useSSL=false #url
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 123456

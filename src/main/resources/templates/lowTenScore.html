@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>评分倒数前十排名</title>
+    <script src="https://cdn.staticfile.org/jquery/2.2.4/jquery.min.js"></script>
+    <link href="https://how2j.cn/study/css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">
+    <script src="https://how2j.cn/study/js/bootstrap/3.3.6/bootstrap.min.js"></script>
+
+    <!-- 引入 echarts.js -->
+    <script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+    <!--<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.6.0/echarts.min.js"></script>-->
+    <!--    <script src="/static/js/echarts.js"></script>-->
+</head>
+<body>
+<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+<div id="main" style="width: 800px;height:450px;"></div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    //数据加载完之前先显示一段简单的loading动画
+    myChart.showLoading();
+    //以下为可视化代码
+
+    var movie_name = [];    //横坐标数组（实际用来盛放X轴坐标值）
+    var score = [];    //纵坐标数组（实际用来盛放Y坐标值）
+    var url = new Map();
+
+    //AJAX接收数据主体
+    $.ajax({
+        type : "GET",
+        async : false,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url : "/getLowTenData",    //请求发送到dataActiont处
+        dataType : "json",        //返回数据形式为json
+        success:function (result) {
+
+            for (var i = 0; i < result.length; i++){
+                movie_name.push(result[i].movie_name);
+                score.push(result[i].score);
+                url.set(result[i].movie_name,result[i].url)
+
+            }
+            myChart.hideLoading();    //隐藏加载动画
+        },
+        error :function(errorMsg) {
+            myChart.hideLoading();    //隐藏加载动画
+            alert("获取后台数据失败！");
+        }
+    });
+
+    const hexToRgba = (hex, opacity) => {
+        let rgbaColor = "";
+        let reg = /^#[\da-f]{6}$/i;
+        if (reg.test(hex)) {
+            rgbaColor = `rgba(${parseInt("0x" + hex.slice(1, 3))},${parseInt(
+                "0x" + hex.slice(3, 5)
+            )},${parseInt("0x" + hex.slice(5, 7))},${opacity})`;
+        }
+        return rgbaColor;
+    };
+
+    // 数据整理
+    let xData = movie_name;
+    let yData = score;
+    // let xData = ['类别1', '类别2', '类别3', '类别4', '类别5', '类别6', '类别7', '类别8'];
+    // let yData = [4757, 3254, 2454, 2011, 1654, 1211, 1211, 254];
+    let max = Math.max(...yData);
+    let labelColor = ['#FD5360', '#FF962B', '#FFAA00']
+    let emptyData = yData.map((v, i) => {
+        let color = i > 2 ? '#1890FF' : labelColor[i];
+        let item = {
+            value: max,
+            label: {
+                formatter: '{a|' + v + '}',
+                position: 'right',
+                distance: 20,
+                rich: {
+                    a: {
+                        color: color,
+                        borderColor: color,
+                        borderWidth: 1,
+                        borderType: 'dashed',
+                        padding: [0, 0, 2, 0],
+                        width: 60,
+                        height: 18,
+                        align: 'center',
+                        verticalAlign: 'middle',
+                        backgroundColor: hexToRgba(color, 0.05)
+                    }
+                }
+
+            }
+        }
+        return item
+    })
+    let xDataFormat = xData.map((v, i) => {
+        let color = i > 2 ? '#333333' : labelColor[i];
+        let item = {
+            value: v,
+            textStyle: {
+                rich: {
+                    a: {
+                        color: color,
+                        width: 20,
+                        height: 20,
+                        align: 'center',
+                        verticalAlign: 'middle',
+                        backgroundColor: '#fff',
+                        borderRadius: 10,
+                        borderColor: hexToRgba(color, 0.2),
+                        borderWidth: 1,
+                        shadowColor: hexToRgba(color, 0.1),
+                        shadowBlur: 5
+                    },
+                    b: {
+                        padding: [0, 5]
+                    },
+                    value: {
+                        color: '#666666'
+                    }
+                }
+            }
+        }
+        return item
+    })
+    xData.reverse();
+    xDataFormat.reverse();
+    yData.reverse();
+    emptyData.reverse();
+
+
+    option = {
+        backgroundColor: '#fff',
+        grid: {
+            top: "5%",
+            left: "1%",
+            right: "15%",
+            bottom: "3%",
+            containLabel: true
+        },
+        xAxis: [{
+            type: "value",
+            splitLine: {
+                show: false
+            },
+            max: function(value) {
+                return value.max
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#D9D9D9'
+                }
+            },
+            axisLabel: {
+                color: '#666'
+            }
+        }],
+        yAxis: [{
+            type: "category",
+            name: "",
+            axisTick: {
+                show: false
+            },
+            splitLine: {
+                show: false
+            },
+            axisLine: {
+                lineStyle: {
+                    color: '#D9D9D9'
+                }
+            },
+            axisLabel: {
+                formatter: function(value) {
+                    return '{a|' + value.substr(0,1) + '}{b|}{value|' + value + '}'
+                }
+            },
+            data: xDataFormat
+        }, {
+            type: "category",
+            name: "",
+            axisTick: {
+                show: false
+            },
+            splitLine: {
+                show: false
+            },
+            axisLabel: {
+                show: false
+            },
+            axisLine: {
+                show: false
+            },
+            data: xData
+        }],
+        series: [{
+            type: 'bar',
+            barWidth: 10,
+            yAxisIndex: 1,
+            itemStyle: {
+                normal: {
+                    barBorderRadius: [0, 6, 6, 0],
+                    color: 'rgba(225,225,225,0.4)'
+                }
+            },
+            label: {
+                show: true,
+                position: 'right',
+                formatter: function(a) {
+                    console.log(a)
+                }
+            },
+            data: emptyData
+        },
+            {
+                type: 'bar',
+                barWidth: 10,
+                zlevel: 1,
+                itemStyle: {
+                    normal: {
+                        barBorderRadius: [0, 6, 6, 0],
+                        color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [{
+                            offset: 0,
+                            color: '#3D9FFF'
+                        }, {
+                            offset: 1,
+                            color: '#41D7F3'
+                        }], false)
+                    }
+                },
+                data: yData,
+            }
+        ]
+    };
+
+
+    // 使用指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+    //点击电影名打开网址
+    myChart.on('click', function (param) {
+
+        console.log(param);//打印查看获取到的数据
+        // console.log(param.data);//一层一层查看获取到的是不是想要的
+        // console.log(param.url);//最终获取
+        window.open(url.get(param.name));//自己的链接并拼接id跳转
+        // alert(param.name+url.get(param.name));
+    });
+
+    window.addEventListener("resize",function(){
+        myChart.resize();
+
+    });
+</script>
+
+
+<div id="second" style="width: 800px;height:450px;" align="right"></div>
+<script type="text/javascript">
+
+    // -----secondChart start-----
+    var myChart1 = echarts.init(document.getElementById("second"));
+
+    //饼图
+    var country = [];
+
+    //AJAX接收数据主体
+    $.ajax({
+        type : "GET",
+        async : false,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+        url : "/getLowTenData",    //请求发送到dataActiont处
+        dataType : "json",        //返回数据形式为json
+        success:function (result) {
+
+            for (var i = 0; i < result.length; i++){
+
+                country.push(result[i].country)
+            }
+            console.log(result);
+        },
+        error :function(errorMsg) {
+            alert("获取后台数据失败！");
+        }
+    });
+    console.log("country: "+country);
+
+    /*var countryNum = country.reduce(function (obj, name) {
+        obj[name] = obj[name] ? ++obj[name] : 1;
+        return obj;
+    }, {});*/
+    var countryNum = country.reduce(function (allNames, name) {
+        if (name in allNames) {
+            allNames[name]++;
+        }
+        else {
+            allNames[name] = 1;
+        }
+        return allNames;
+    }, {});
+
+    console.log(countryNum);
+
+    var countryKey = [];
+    var countryValue = [];
+    for(var key in countryNum){
+        // alert(key); //json对象的key
+        // alert(jb[key]); //json对象的值
+        countryKey.push(key);
+        countryValue.push(countryNum[key]);
+    }
+
+
+
+    /* var countryJson = JSON.stringify(countryNum);
+     console.log(countryJson);*/
+
+    var countryPie = [];
+    for (var i = 0; i < countryKey.length; i++){
+        /*countryPie.push({
+            "value":countryNum[i], "name":country[i]*/
+        var test={"value":countryValue[i], "name":countryKey[i]};
+        countryPie.push(test);
+
+    }
+
+    option1 = {
+        title: {
+            text: '',
+            subtext: '',
+            left: 'right'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'right',
+            data: countryPie
+        },
+        series: [
+            {
+                name: '物料来源',
+                type: 'pie',
+                radius: '60%',
+                center: ['50%', '50%'],
+                data:countryPie,
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    myChart1.setOption(option1);
+    // -----secondChart end-----
+    window.addEventListener("resize",function(){
+        myChart1.resize();
+
+    });
+
+</script>
+</body>
+</html>
